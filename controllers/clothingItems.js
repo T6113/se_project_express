@@ -7,7 +7,7 @@ const createItem = (req, res) => {
     .then((item) => {
       res.send({ data: item });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).send({ message: "Error Creating Items" });
     });
 };
@@ -57,16 +57,15 @@ const likeItem = (req, res) =>
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
-    .then((item) =>
-      item
-        ? res.status(200).send(item)
-        : res.status(404).send({ message: "Item not found" })
-    )
+    .then((item) => {
+      if (item) return res.status(200).send(item);
+      return res.status(404).send({ message: "Item not found" });
+    })
     .catch((err) => {
       if (err.name === "CastError") {
         return res.status(400).send({ message: "Invalid item ID" });
       }
-      res.status(500).send({ message: "Internal Server Error" });
+      return res.status(500).send({ message: "Internal Server Error" });
     });
 
 const unlikeItem = (req, res) =>
@@ -75,16 +74,15 @@ const unlikeItem = (req, res) =>
     { $pull: { likes: req.user._id } },
     { new: true }
   )
-    .then((item) =>
-      item
-        ? res.status(200).send(item)
-        : res.status(404).send({ message: "Item not found" })
-    )
+    .then((item) => {
+      if (item) return res.status(200).send(item);
+      return res.status(404).send({ message: "Item not found" });
+    })
     .catch((err) => {
       if (err.name === "CastError") {
         return res.status(400).send({ message: "Invalid item ID" });
       }
-      res.status(500).send({ message: "Internal Server Error" });
+      return res.status(500).send({ message: "Internal Server Error" });
     });
 
 module.exports = {

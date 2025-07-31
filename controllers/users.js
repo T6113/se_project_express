@@ -1,6 +1,6 @@
 const User = require("../models/user");
 
-//seperate file with const BAD_RESQUEST_CODE =400 and export it and import it in controllers file & use that inplace of hardcode numbers.
+// seperate file with const BAD_RESQUEST_CODE =400 and export it and import it in controllers file & use that inplace of hardcode numbers.
 
 const getUsers = (req, res) => {
   User.find({})
