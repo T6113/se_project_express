@@ -13,8 +13,15 @@ mongoose
   .catch(console.error);
 
 app.use(express.json());
-app.use("/", mainRouter);
 
-app.listen(PORT, () => {
-  console.warn(`Server is running on port ${PORT}`);
+// Temporary middleware to set a default user ID for all requests
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: "688bb51a9b017e969df3565c", // Replace with a real user ID from your database if needed
+  };
+  next();
 });
+
+// Mount main router
+app.use("/", mainRouter);
