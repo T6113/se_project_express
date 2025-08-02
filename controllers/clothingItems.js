@@ -1,14 +1,20 @@
 const ClothingItem = require("../models/clothingItem");
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require("../utils/errors");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
+  const owner = req.user._id;
 
-  ClothingItem.create({ name, weather, imageUrl })
+  ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
       res.send({ data: item });
     })
     .catch(() => {
-      res.status(500).send({ message: "Error Creating Items" });
+      res.status(BAD_REQUEST).send({ message: "Bad Request Status" });
     });
 };
 
@@ -19,7 +25,9 @@ const getItems = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send({ message: "Error fetching Items" });
+      res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error fetching Items" });
     });
 };
 
@@ -34,7 +42,15 @@ const updateItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send({ message: "Error updating item" });
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "Item not found" });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error updating item" });
     });
 };
 
@@ -47,7 +63,15 @@ const deleteItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send({ message: "Error deleting item" });
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(NOT_FOUND).send({ message: "Item not found" });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Error deleting item" });
     });
 };
 
@@ -63,9 +87,11 @@ const likeItem = (req, res) =>
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        return res.status(400).send({ message: "Invalid item ID" });
+        return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
       }
-      return res.status(500).send({ message: "Internal Server Error" });
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 
 const unlikeItem = (req, res) =>
@@ -80,9 +106,11 @@ const unlikeItem = (req, res) =>
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        return res.status(400).send({ message: "Invalid item ID" });
+        return res.status(BAD_REQUEST).send({ message: "Invalid item ID" });
       }
-      return res.status(500).send({ message: "Internal Server Error" });
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 
 module.exports = {

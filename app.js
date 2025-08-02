@@ -23,5 +23,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mount main router
 app.use("/", mainRouter);
+
+app.listen(PORT, () => {
+  console.warn(`Server is running on port ${PORT}`);
+});
