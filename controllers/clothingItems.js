@@ -13,8 +13,13 @@ const createItem = (req, res) => {
     .then((item) => {
       res.send({ data: item });
     })
-    .catch(() => {
-      res.status(BAD_REQUEST).send({ message: "Bad Request Status" });
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return res.status(BAD_REQUEST).send({ message: "Bad Request Status" });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "Internal Server Error" });
     });
 };
 
