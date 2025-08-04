@@ -5,9 +5,10 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
+  UNAUTHORIZED,
+  CONFLICT,
 } = require("../utils/errors");
 const bcrypt = require("bcryptjs");
-const UNAUTHORIZED = 401;
 
 // Login controller
 
@@ -54,7 +55,7 @@ const createUser = (req, res) => {
         return res.status(BAD_REQUEST).send({ message: "Bad Request" });
       }
       if (err.code === 11000) {
-        return res.status(409).send({ message: "Email already exists" });
+        return res.status(CONFLICT).send({ message: "Email already exists" });
       }
       return res
         .status(INTERNAL_SERVER_ERROR)

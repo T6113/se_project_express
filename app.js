@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
 const { login, createUser } = require("./controllers/users");
+const auth = require("./middlewares/auth");
 const cors = require("cors");
 
 const app = express();
@@ -17,9 +18,12 @@ mongoose
 app.use(express.json());
 app.use(cors());
 
-// Auth routes
+// Public routes
 app.post("/signin", login);
 app.post("/signup", createUser);
+
+// Authorization middleware for all other routes
+app.use(auth);
 
 app.use("/", mainRouter);
 

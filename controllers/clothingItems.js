@@ -66,7 +66,7 @@ const deleteItem = (req, res) => {
     .then((item) => {
       if (!item.owner.equals(req.user._id)) {
         return res
-          .status(403)
+          .status(FORBIDDEN)
           .send({ message: "You do not have permission to delete this item" });
       }
       return ClothingItem.findByIdAndDelete(itemId).then(() =>
@@ -95,7 +95,7 @@ const likeItem = (req, res) =>
   )
     .then((item) => {
       if (item) return res.status(200).send(item);
-      return res.status(404).send({ message: "Item not found" });
+      return res.status(NOT_FOUND).send({ message: "Item not found" });
     })
     .catch((err) => {
       if (err.name === "CastError") {
@@ -114,7 +114,7 @@ const unlikeItem = (req, res) =>
   )
     .then((item) => {
       if (item) return res.status(200).send(item);
-      return res.status(404).send({ message: "Item not found" });
+      return res.status(NOT_FOUND).send({ message: "Item not found" });
     })
     .catch((err) => {
       if (err.name === "CastError") {
