@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
+const { login, createUser } = require("./controllers/users");
+const cors = require("cors");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -13,15 +15,11 @@ mongoose
   .catch(console.error);
 
 app.use(express.json());
+app.use(cors());
 
-// Temporary middleware to set a default user ID for all requests
-
-app.use((req, res, next) => {
-  req.user = {
-    _id: "688bb51a9b017e969df3565c", // Replace with a real user ID from your database if needed
-  };
-  next();
-});
+// Auth routes
+app.post("/signin", login);
+app.post("/signup", createUser);
 
 app.use("/", mainRouter);
 

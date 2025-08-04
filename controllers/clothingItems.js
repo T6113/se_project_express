@@ -61,10 +61,17 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
-    .then(() => {
-      res.status(204).send();
+    .then((item) => {
+      if (!item.owner.equals(req.user._id)) {
+        return res
+          .status(403)
+          .send({ message: "You do not have permission to delete this item" });
+      }
+      return ClothingItem.findByIdAndDelete(itemId).then(() =>
+        res.status(204).send()
+      );
     })
     .catch((err) => {
       console.error(err);
