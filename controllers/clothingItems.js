@@ -3,6 +3,7 @@ const {
   BAD_REQUEST,
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -70,7 +71,7 @@ const deleteItem = (req, res) => {
           .send({ message: "You do not have permission to delete this item" });
       }
       return ClothingItem.findByIdAndDelete(itemId).then(() =>
-        res.status(204).send()
+        res.status(200).send()
       );
     })
     .catch((err) => {

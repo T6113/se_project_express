@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Email is required"],
     unique: true,
     validate: {
-      validator(value) {
+      validator: function isValidEmail(value) {
         return validator.isEmail(value);
       },
       message: "You must enter a valid email address",
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Avatar URL is required"],
     validate: {
-      validator(value) {
+      validator: function isValidUrl(value) {
         return validator.isURL(value);
       },
       message: "You must enter a valid URL",

@@ -1,5 +1,6 @@
-const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
 const {
   BAD_REQUEST,
@@ -8,30 +9,30 @@ const {
   UNAUTHORIZED,
   CONFLICT,
 } = require("../utils/errors");
-const bcrypt = require("bcryptjs");
 
 // Login controller
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  User.findUserByCredentials(email, password)
+  if (!email || !password) {
+    return res
+      .status(BAD_REQUEST)
+      .send({ message: "Email and password are required" });
+  }
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.send({ token });
+      return res.send({ token });
     })
     .catch((err) => {
       console.error(err);
-      res.status(UNAUTHORIZED).send({ message: "Incorrect email or password" });
-    });
-};
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
+      if (err.message === "Incorrect email or password") {
+        return res
+          .status(UNAUTHORIZED)
+          .send({ message: "Incorrect email or password" });
+      }
       return res
         .status(INTERNAL_SERVER_ERROR)
         .send({ message: "Internal Server Error" });
@@ -106,7 +107,6 @@ const updateCurrentUser = (req, res) => {
 };
 
 module.exports = {
-  getUsers,
   createUser,
   getCurrentUser,
   login,
