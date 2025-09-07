@@ -11,7 +11,7 @@ const { getItems } = require("./controllers/clothingItems");
 const auth = require("./middlewares/auth");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const errorHandler = require("./middlewares/errorHandler");
-const { NotFoundError } = require("./utils/errors");
+const NotFoundError = require("./utils/NotFoundError");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -30,7 +30,7 @@ app.use(cors());
 app.use(requestLogger);
 
 // Crash test route for server recovery testing
-app.get("/crash-test", (req, res, next) => {
+app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("Server will crash now");
   }, 0);
@@ -40,6 +40,14 @@ app.get("/crash-test", (req, res, next) => {
 app.post("/signin", login);
 app.post("/signup", createUser);
 app.get("/items", getItems); // Public GET /items
+
+// Temporary hardcoded user for testing purposes
+app.use((req, res, next) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133",
+  };
+  next();
+});
 
 // Authorization middleware for all other routes
 app.use(auth);
