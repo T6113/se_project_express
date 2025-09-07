@@ -6,20 +6,32 @@ Welcome to the back-end of WTWR (What to Wear?), a RESTful API server for a clot
 
 This server provides endpoints for managing users and clothing items, including features such as:
 
-- User registration and retrieval
+- User registration and authentication with JWT
 - Adding, updating, and deleting clothing items
 - Liking and unliking items
-- Data validation and error handling
+- Data validation using Joi and Celebrate
+- Centralized error handling
+- Request and error logging with Winston
 - Association of items with their owners
+
+## Deployed Application
+
+**Live Domain:** http://api.whatwewear.crabdance.com
+
+**Frontend Repository:** https://github.com/T6113/se_project_react
 
 ## Technologies & Techniques Used
 
 - **Node.js** & **Express.js**: For building the server and API endpoints
 - **MongoDB** & **Mongoose**: For data storage and schema modeling
+- **JWT (jsonwebtoken)**: For user authentication and authorization
+- **bcryptjs**: For password hashing
+- **Joi & Celebrate**: For request validation
+- **Winston & express-winston**: For logging requests and errors
 - **ESLint** & **Prettier**: For code quality and consistent formatting
 - **Validator.js**: For validating user input (e.g., URLs)
 - **Environment Variables**: For configuration and security
-- **Error Handling**: Centralized error codes and messages for maintainability
+- **Error Handling**: Centralized error codes and custom error classes
 - **Modular Structure**: Organized controllers, models, routes, and utilities
 
 ## Running the Project
