@@ -6,7 +6,7 @@ Welcome to the back-end of WTWR (What to Wear?), a RESTful API server for a clot
 
 This server provides endpoints for managing users and clothing items, including features such as:
 
-- User registration and authentication with JWT
+- User registration and authentication.
 - Adding, updating, and deleting clothing items
 - Liking and unliking items
 - Data validation using Joi and Celebrate
@@ -32,14 +32,3 @@ This server provides endpoints for managing users and clothing items, including 
 - **Validator.js**: For validating user input (e.g., URLs)
 - **Environment Variables**: For configuration and security
 - **Error Handling**: Centralized error codes and custom error classes
-- **Modular Structure**: Organized controllers, models, routes, and utilities
-
-## Running the Project
-
-`npm run start` — to launch the server
-
-`npm run dev` — to launch the server with the hot reload feature
-
-## Testing
-
-Before committing your code, make sure you edit the file `sprint.txt` {example: SE_PROJECT_EXPRESS} in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For example: 12
