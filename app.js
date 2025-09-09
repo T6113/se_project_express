@@ -11,6 +11,10 @@ const { getItems } = require("./controllers/clothingItems");
 const auth = require("./middlewares/auth");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const errorHandler = require("./middlewares/errorHandler");
+const {
+  validateUserBody,
+  validateAuthentication,
+} = require("./middlewares/validation");
 const NotFoundError = require("./utils/NotFoundError");
 
 const app = express();
@@ -37,8 +41,8 @@ app.get("/crash-test", () => {
 });
 
 // Public routes
-app.post("/signin", login);
-app.post("/signup", createUser);
+app.post("/signin", validateAuthentication, login);
+app.post("/signup", validateUserBody, createUser);
 app.get("/items", getItems); // Public GET /items
 
 // Temporary hardcoded user for testing purposes
